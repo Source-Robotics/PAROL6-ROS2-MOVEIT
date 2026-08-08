@@ -7,34 +7,45 @@ default_acceleration_scaling_factor: 0.1
 
 # Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
+#
+# max_velocity/max_acceleration are the real per-joint hard limits from
+# parol6-server's config.py (LIMITS.joint.hard.{velocity,acceleration},
+# derived from the firmware's step-rate limits) -- the placeholder values
+# here previously used a uniform 3.0 rad/s max_velocity for every joint
+# (overestimating L2/L3's real capability) and had
+# has_acceleration_limits: false everywhere, which made MoveIt's time
+# parameterization (AddTimeOptimalParameterization) fail outright with
+# "No acceleration limit was defined for joint L1!" -- caught the first
+# time a real plan+execute (not just planning-scene display) was
+# attempted end-to-end.
 joint_limits:
   L1:
     has_velocity_limits: true
-    max_velocity: 3.0
-    has_acceleration_limits: false
-    max_acceleration: 0.0
+    max_velocity: 2.30097118
+    has_acceleration_limits: true
+    max_acceleration: 6.90291355
   L2:
     has_velocity_limits: true
-    max_velocity: 3.0
-    has_acceleration_limits: false
-    max_acceleration: 0.0
+    max_velocity: 1.22718463
+    has_acceleration_limits: true
+    max_acceleration: 3.68155389
   L3:
     has_velocity_limits: true
-    max_velocity: 3.0
-    has_acceleration_limits: false
-    max_acceleration: 0.0
+    max_velocity: 1.73614331
+    has_acceleration_limits: true
+    max_acceleration: 5.20842993
   L4:
     has_velocity_limits: true
-    max_velocity: 3.0
-    has_acceleration_limits: false
-    max_acceleration: 0.0
+    max_velocity: 2.45436926
+    has_acceleration_limits: true
+    max_acceleration: 7.36310778
   L5:
     has_velocity_limits: true
-    max_velocity: 3.0
-    has_acceleration_limits: false
-    max_acceleration: 0.0
+    max_velocity: 2.45436926
+    has_acceleration_limits: true
+    max_acceleration: 7.36310778
   L6:
     has_velocity_limits: true
-    max_velocity: 3.0
-    has_acceleration_limits: false
-    max_acceleration: 0.0
+    max_velocity: 2.6507188
+    has_acceleration_limits: true
+    max_acceleration: 7.9521564

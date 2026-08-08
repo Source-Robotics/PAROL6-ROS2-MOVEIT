@@ -1,9 +1,21 @@
-# Default initial positions for parol6's ros2_control fake system
-
+# Default initial positions for parol6's ros2_control fake system.
+#
+# All-zero used to be here, which is invalid: L2's URDF joint limit is
+# [-2.5309, -0.0589] rad (zero not in range) and L3's is [1.8826, 5.0242]
+# rad (also excludes zero) -- found by actually running MoveIt planning
+# against this config for the first time, which failed immediately with
+# "Motion planning start tree could not be initialized!" because the
+# mock hardware's start state was already out of bounds before any goal
+# was even considered.
+#
+# Replaced with parol6's own real HOME_ANGLES_DEG (parol6/config.py,
+# sourced from PAROL6_ROBOT.joint.standby_deg -- the actual hardware
+# standby/home position, not an arbitrary in-range value), converted to
+# radians. Confirmed within bounds for all six joints.
 initial_positions:
-  L1: 0.0
-  L2: 0.0
-  L3: 0.0
-  L4: 0.0
-  L5: 0.0
-  L6: 0.0
+  L1: 1.5707963267948966   # 90 deg
+  L2: -1.5707963267948966  # -90 deg
+  L3: 3.141592653589793    # 180 deg
+  L4: 0.0                  # 0 deg
+  L5: 0.0                  # 0 deg
+  L6: 3.141592653589793    # 180 deg

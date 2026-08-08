@@ -1,13 +1,25 @@
-# MoveIt uses this configuration for controller management
+# MoveIt uses this configuration for controller management.
+#
+# action_ns was missing entirely, which isn't optional: found by actually
+# executing a trajectory (not just planning) for the first time --
+# moveit_simple_controller_manager logged "Returned 0 controllers in
+# list" and refused to execute ("Unable to identify any set of
+# controllers that can actuate the specified joints"), even though the
+# controller name/joints here correctly match parol6_arm_controller in
+# ros2_controllers.yaml. Without action_ns it can't find the controller's
+# FollowJointTrajectory action server, which joint_trajectory_controller
+# exposes at <controller_name>/follow_joint_trajectory.
 
 moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
 
 moveit_simple_controller_manager:
   controller_names:
-    - arm_group_controller
+    - parol6_arm_controller
 
-  arm_group_controller:
+  parol6_arm_controller:
     type: FollowJointTrajectory
+    action_ns: follow_joint_trajectory
+    default: true
     joints:
       - L1
       - L2

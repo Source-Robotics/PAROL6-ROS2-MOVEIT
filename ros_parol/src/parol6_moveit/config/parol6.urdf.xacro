@@ -1,14 +1,34 @@
 <?xml version="1.0"?>
+<!--
+  tool/tool_variant default to "pneumatic"/"vertical" (not "none") because
+  this MoveIt config plans to the "tool_tcp" frame (see parol6.srdf's
+  arm_group, which now includes tool_tcp_joint as its tip), and tool_tcp's
+  actual position depends on which tool is mounted, see
+  $(find parol6)/urdf/parol6_with_tools.xacro for the full arg
+  documentation. Override at the moveit_config/launch-argument level if a
+  different tool is mounted; every tool variant defines a "tool_tcp_joint"
+  from L6, so the SRDF's chain to it doesn't need to change per tool.
+-->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="parol6">
     <xacro:arg name="initial_positions_file" default="initial_positions.yaml" />
+    <xacro:arg name="use_real_hardware" default="false" />
+    <xacro:arg name="bridge_host" default="127.0.0.1" />
+    <xacro:arg name="bridge_port" default="6001" />
+    <xacro:arg name="tool" default="pneumatic" />
+    <xacro:arg name="tool_variant" default="vertical" />
 
-    <!-- Import parol6 urdf file -->
-    <xacro:include filename="$(find parol6)/urdf/parol6.urdf" />
+    <!-- Import parol6 urdf file, with the mounted tool + tool_tcp frame -->
+    <xacro:include filename="$(find parol6)/urdf/parol6_with_tools.xacro" />
 
     <!-- Import control_xacro -->
     <xacro:include filename="parol6.ros2_control.xacro" />
 
 
-    <xacro:parol6_ros2_control name="FakeSystem" initial_positions_file="$(arg initial_positions_file)"/>
+    <xacro:parol6_ros2_control
+        name="FakeSystem"
+        initial_positions_file="$(arg initial_positions_file)"
+        use_real_hardware="$(arg use_real_hardware)"
+        bridge_host="$(arg bridge_host)"
+        bridge_port="$(arg bridge_port)" />
 
 </robot>

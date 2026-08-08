@@ -1,16 +1,21 @@
-# This config file is used by ros2_control
+# This config file is used by ros2_control.
+#
+# Controller renamed from arm_group_controller to parol6_arm_controller,
+# and tuning parameters (state_publish_rate, action_monitor_rate,
+# constraints) copied from parol6_ros2_control's parol6_bringup package,
+# to match the config already validated against real hardware this
+# session rather than re-deriving separate untested defaults here.
 controller_manager:
   ros__parameters:
-    update_rate: 100  # Hz
-
-    arm_group_controller:
-      type: joint_trajectory_controller/JointTrajectoryController
-
+    update_rate: 100  # Hz -- matches parol6-server's default control loop cadence closely enough for streaming servo_j targets
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-arm_group_controller:
+    parol6_arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+parol6_arm_controller:
   ros__parameters:
     joints:
       - L1
@@ -24,3 +29,10 @@ arm_group_controller:
     state_interfaces:
       - position
       - velocity
+    state_publish_rate: 50.0
+    action_monitor_rate: 20.0
+    allow_partial_joints_goal: false
+    open_loop_control: false
+    constraints:
+      stopped_velocity_tolerance: 0.05
+      goal_time: 1.0

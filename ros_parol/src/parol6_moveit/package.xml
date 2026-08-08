@@ -37,6 +37,10 @@
   <exec_depend>moveit_ros_warehouse</exec_depend>
   <exec_depend>moveit_setup_assistant</exec_depend>
   <exec_depend>parol6</exec_depend>
+  <!-- real_robot.launch.py: talks to actual/simulated PAROL6 hardware
+       via parol6-server, instead of demo.launch.py's mock_components -->
+  <exec_depend>parol6_bridge</exec_depend>
+  <exec_depend>parol6_hardware_interface</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>rviz2</exec_depend>
   <exec_depend>rviz_common</exec_depend>

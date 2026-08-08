@@ -1,12 +1,25 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-    <xacro:macro name="parol6_ros2_control" params="name initial_positions_file">
+    <xacro:macro name="parol6_ros2_control"
+                 params="name initial_positions_file use_real_hardware:=false bridge_host:=127.0.0.1 bridge_port:=6001">
         <xacro:property name="initial_positions" value="${load_yaml(initial_positions_file)['initial_positions']}"/>
 
         <ros2_control name="${name}" type="system">
             <hardware>
-                <!-- By default, set up controllers for simulation. This won't work on real hardware -->
-                <plugin>mock_components/GenericSystem</plugin>
+                <xacro:if value="${use_real_hardware}">
+                    <!-- Talks to a parol6_bridge daemon (TCP loopback), which in turn
+                         talks to parol6-server over UDP using the parol6 Python SDK.
+                         See parol6_hardware_interface and parol6_bridge packages, and
+                         launch/real_robot.launch.py. -->
+                    <plugin>parol6_hardware_interface/Parol6SystemInterface</plugin>
+                    <param name="bridge_host">${bridge_host}</param>
+                    <param name="bridge_port">${bridge_port}</param>
+                    <param name="connect_timeout_sec">10.0</param>
+                </xacro:if>
+                <xacro:unless value="${use_real_hardware}">
+                    <!-- Default: simulation only, no real robot involved. -->
+                    <plugin>mock_components/GenericSystem</plugin>
+                </xacro:unless>
             </hardware>
             <joint name="L1">
                 <command_interface name="position"/>

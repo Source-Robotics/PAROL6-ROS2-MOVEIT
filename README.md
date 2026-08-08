@@ -45,6 +45,40 @@ source install/setup.bash
 LC_NUMERIC=en_US.UTF-8 ros2 launch parol6_moveit demo.launch.py
 ```
 
+### 🤖 Run Against Real Hardware
+
+`real_robot.launch.py` brings up the same MoveIt 2 stack as the demo above, but
+backed by [`ros2_control`](https://control.ros.org/) talking to an actual (or
+software-simulated) PAROL6 instead of `mock_components/GenericSystem`.
+
+The `ros2_control` hardware interface itself (`parol6_hardware_interface`) and
+the TCP/UDP bridge daemon it talks to (`parol6_bridge`) live in a separate
+repo, [`parol6_ros2_control`](https://github.com/grahas/parol6_ros2_control) —
+standard ROS 2 practice is to keep a robot's `ros2_control` hardware interface
+out of its MoveIt config package, so it can be reused by other launch files
+(e.g. a no-MoveIt bringup) without pulling MoveIt in. Clone it alongside this
+repo:
+
+```bash
+cd ~/ros2_ws/src
+git clone https://github.com/grahas/parol6_ros2_control.git
+cd ~/ros2_ws
+colcon build
+```
+
+You'll also need [`parol6-server`](https://github.com/PCrnjak/PAROL6-python-API)
+running and reachable (real serial port, or its `PAROL6_FAKE_SERIAL=1`
+simulator mode) — `real_robot.launch.py` connects to it via `parol6_bridge`
+but does not start it itself:
+
+```bash
+ros2 launch parol6_moveit real_robot.launch.py \
+    bridge_python:=/path/to/venv/bin/python3   # must have the `parol6` pip package installed
+```
+
+See `parol6_ros2_control`'s README for the full `ros2_control`-side setup and
+known environment gotchas.
+
 ### 📚 Helpful Resources
 - [Link1](https://www.youtube.com/watch?v=M2yiVbJmzKY&list=PLeEzO_sX5H6TNMBiworxO8RpQlcYfl54y&index=10)
 - [Link2](https://www.youtube.com/watch?v=nZqTdzGAfYs)
@@ -70,5 +104,5 @@ ros2 launch moveit_robot_arm_sim demo.launch.py
 
 ### ✅ TODO
 
-- [ ] Connect with real PAROL6 robot
+- [x] Connect with real PAROL6 robot
 - [ ] Move PAROL6  
