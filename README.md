@@ -1,6 +1,6 @@
 # PAROL6-ROS2-MOVEIT
 
-This repository provides ROS 2 MoveIt 2 integration for the [PAROL6](https://github.com/PCrnjak/PAROL6-Desktop-robot-arm) 6-DOF open-source robotic arm. It includes a simulation demo, URDF models, and launch files for testing and planning.
+This repository provides ROS 2 MoveIt 2 integration for the [PAROL6](https://github.com/Source-Robotics/PAROL6-Desktop-robot-arm) 6-DOF open-source robotic arm. It includes a simulation demo, URDF models, and launch files for testing and planning.
 
 ![PAROL6 Demo](MEDIA/PAROL6_moveit_gif.gif)
 
